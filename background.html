@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script>
+		chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+			if(request.method == 'saveTest') {
+				sendResponse({test: localStorage['test']});
+			}
+			else {
+				sendResponse({});
+			}
+		});
+	</script>
+</head>
+<body>
+
+</body>
+</html>

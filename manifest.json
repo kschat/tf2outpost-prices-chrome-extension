@@ -1,0 +1,31 @@
+{
+	"manifest_version": 2,
+	"name": "tf2outpost price integration",
+	"description": "Grabs prices of items from backpack.tf and adds them to tf2outpost.com",
+	"version": "1.1.5",
+	"icons": {
+		"16": "images/keyicon16.png",
+		"48": "images/keyicon48.png",
+		"128": "images/keyicon128.png"
+	},
+	"content_scripts": [
+		{
+			"matches": ["*://*.tf2outpost.com/*"],
+			"css": ["css/prices.css"],
+			"js": ["js/jquery-1.9.0.min.js", "js/tf2op-bp.js"]
+		}
+	],
+	"permissions": [
+		"storage",
+		"http://backpack.tf/*",
+		"*://*.tf2outpost.com/*"
+	],
+	"page_action": {
+		"default_icon": {
+			"19": "images/keyicon19.png",
+			"38": "images/keyicon38.png"
+		},
+		"default_title": "TF2 Outpost prices",
+		"default_popup": "popup.html"
+	}
+}
