@@ -140,8 +140,11 @@ jQuery.noConflict();
         return color.substring(0, color.length-1).toUpperCase();
     }
     
-    var loadUI = function() {
-        $('.item').each(function(index) {
+    var loadUI = function($items) {
+        console.log('loadUI:');
+        console.log(arguments.length);
+
+        $items.each(function(index) {
             dataHash =  $(this).attr('data-hash');
             
             if(dataHash) {
@@ -162,20 +165,29 @@ jQuery.noConflict();
                 //Extracts the color id of the paint from the style of the DOM element.
                 //Then constructs a hash and gets the item data.
                 var paint = paintMapping[extractColor($(this).find('a > .paint').attr('style'))];
-                if(paint) {
+                if(paint && typeof paint.value != 'undefined' ) {
                     paint = getItemData("440,"+paint+",6");
                     item.value += paint.value;
-                    console.log(item.value);
                 }
 
                 //If the item is truthy, add a DOM element with it's price
                if(item) {
                     var price = convertCurrency(item.value);
 
-                    priceElements[index].updatePrice(price);
+                    if(arguments.length == 2) {
+                        arguments[1][index].updatePrice(price);
+                    }
+                    else {
+                        priceElements[index].updatePrice(price);
+                    }
                }
                else {
-                    priceElements[index].removeElement();
+                    if(arguments.length == 2) {
+                        arguments[1][index].removeElement();
+                    }
+                    else {
+                        priceElements[index].removeElement();
+                    }
                }
             }
         });
@@ -202,7 +214,121 @@ jQuery.noConflict();
         //Loads the price elements
         loadUI();
     }
-    
+
+    //Object used to control the never ending tf2outpost feature
+    var LoadingElement = function(selector) {
+        $(selector).after('<div class="notes never-ending-loader"><div class="loader-message"></div></div>')
+        this.el = $('.never-ending-loader');
+        this.hidePagination(selector);
+        this.currentPage = window.location.pathname.toString();
+        this.pageNumber = 0;
+
+        this.message = 'Never ending tf2outpost is enabled - scroll to load the next page';
+        $(this.el).children('.loader-message').html(this.message);
+    }
+
+    //Really needs to be split up into some form of MV*. Probably need to start using backbone.js
+    LoadingElement.prototype = {
+        hidePagination: function(selector) {
+            $(selector).remove();
+        },
+        updatePageNumber: function() {
+            var page = this.currentPage;
+            var pageName = page.split('/');
+
+            if(pageName[pageName.length - 1] == '20') {
+                this.pageNumber = '1';
+            }
+            else if(isNaN(pageName[pageName.length - 1]) || pageName[pageName.length - 1] == '') {
+                console.log("pageName: " + pageName[pageName.length - 1]);
+                this.pageNumber = '2';
+            }
+            else {
+                this.pageNumber = (parseInt(page.split('/')[2], 10) + 1);
+            }
+
+            return this.pageNumber;
+        },
+        detectBottomOfPage: function() {
+            if($(window).innerHeight() + $(window).scrollTop() >= $('body').height()) {
+                this.sendPageRequest();
+                return true;
+            }
+
+            return false;
+        },
+        sendPageRequest: function() {
+            this.pageNumber = this.updatePageNumber();
+            console.log(this.pageNumber);
+            var xhr = new XMLHttpRequest();
+
+            //closure #swag
+            xhr.onreadystatechange = (function(that, xhr) {
+                return function() {
+                    if(xhr.readyState == 4) {
+                        if(xhr.status == 200) {
+                            that.loadNextPage(xhr.responseText);
+                        }
+                    }
+                };
+            })(this, xhr);
+
+            //Builds the URI to send to the server
+            var page = '/';
+            //If the pathname is the root, we know we're on the first page on the home page
+            if(this.currentPage === '/') {
+                page = '/recent/2';
+            }
+            else {
+                page = this.currentPage;
+                var pageName = page.split('/');
+                //If the current page is 20 then we have hit the last page and need to
+                //start from the beginning
+                if(pageName[pageName.length - 1] == '20') {
+                    page = '/';
+                }
+                else if(isNaN(pageName[pageName.length - 1])) {
+                    page = '/' + pageName[pageName.length - 1] + '/2';
+                }
+                else {
+                    //Otherwise set the page to the pageName and the current page number + 1
+                    page = '/' + pageName[pageName.length - 2] + '/' + (parseInt(page.split('/')[2], 10) + 1);
+                }
+            }
+
+            this.currentPage = page;
+            xhr.open('GET', 'http://www.tf2outpost.com' + page);
+            xhr.send(null);
+            $(this.el).children('.loader-message').html('loading...');
+        },
+        loadNextPage: function(page) {
+            //Grab every trade from the loaded and page and inject them before the
+            //loading element
+            var trades = $(page).find('.trade');
+            var items = trades.find('.item');
+            var tempElements = [];
+
+            if(trades.length > 0) {
+                $(this.el).before('<div class="never-ending-loader">Page: '+ this.pageNumber+'</div>').before(trades);
+
+                //Iterates through each item element and creates a price element containing the text 'loading'
+                items.each(function(index) {
+                    var dataHash = $(this).attr('data-hash');
+                    
+                    if(dataHash) {
+                        tempElements[index] = new PriceElement('loading');
+                        $(this).prepend(tempElements[index].getDOMElement());
+                    }
+                });
+
+                loadUI(items, tempElements);
+            }
+            else {
+                $(this.el).children('.loader-message').html('Nothing else to load');
+            }
+        }
+    };
+
     var prices = JSON.parse(localStorage.getItem('itemList'));
     var lastUpdate = localStorage.getItem('lastUpdate');
     var priceElements = [];
@@ -287,7 +413,9 @@ jQuery.noConflict();
     };
 
     $(document).ready(function() {
-        
+        var test = new LoadingElement('#pagination');
+        $(window).scroll($.proxy(test.detectBottomOfPage, test));
+
         //Iterates through each item element and creates a price element containing the text 'loading'
         $('.item').each(function(index) {
             dataHash =  $(this).attr('data-hash');
@@ -306,7 +434,7 @@ jQuery.noConflict();
             xhr.send(null);
         }
         else {
-            loadUI();
+            loadUI($('.item'));
         }
     });
 })(jQuery);
