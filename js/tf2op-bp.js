@@ -115,32 +115,6 @@ jQuery.noConflict();
         
         return value.toFixed(2) + ' ref';
     }
-
-    var setPriceList = function(list) {
-        localStorage['itemList'] = JSON.stringify(list);
-    }
-
-    var getPriceList = function() {
-        try {
-            return JSON.parse(localStorage['itemList']);
-        }
-        catch(ex) {
-            return;
-        }
-    }
-    
-    var getLastPriceUpdate = function() {
-        try {
-            return localStorage['lastUpdate'];
-        }
-        catch(ex) {
-            return;
-        }
-    }
-
-    var setLastPriceUpdate = function(time) {
-        localStorage['lastUpdate'] = time;
-    }
     
     var getHoursPassed = function(time1, time2) {
         return (time1 - time2) / 60 / 60;
@@ -156,6 +130,14 @@ jQuery.noConflict();
         }
         
         return value;
+    }
+
+    var extractColor = function(styleString) {
+        if(typeof styleString === 'undefined') {
+            return;
+        }
+        var color = styleString.split('#')[1];
+        return color.substring(0, color.length-1).toUpperCase();
     }
     
     var loadUI = function() {
@@ -173,16 +155,24 @@ jQuery.noConflict();
                 if($(this).attr('style')) {
                     dataHash += ',' + getUnusualEffect($(this).attr('style'));
                 }
-                
-                
+
                 //Gets the item data for the current item
                 var item = getItemData(dataHash);
                 
+                //Extracts the color id of the paint from the style of the DOM element.
+                //Then constructs a hash and gets the item data.
+                var paint = paintMapping[extractColor($(this).find('a > .paint').attr('style'))];
+                if(paint) {
+                    paint = getItemData("440,"+paint+",6");
+                    item.value += paint.value;
+                    console.log(item.value);
+                }
+
                 //If the item is truthy, add a DOM element with it's price
                if(item) {
                     var price = convertCurrency(item.value);
 
-                    priceElements[index].updatePrice(convertCurrency(item.value));
+                    priceElements[index].updatePrice(price);
                }
                else {
                     priceElements[index].removeElement();
@@ -205,16 +195,16 @@ jQuery.noConflict();
         var p = list.response.prices;
         var t = list.response.current_time;
 
-        setPriceList(p);
-        setLastPriceUpdate(t);
-        prices = getPriceList();
+        localStorage.setItem('itemList', JSON.stringify(p));
+        localStorage.setItem('lastUpdate', t);
+        prices = p; 
         
         //Loads the price elements
         loadUI();
     }
     
-    var prices = getPriceList();
-    var lastUpdate = getLastPriceUpdate();
+    var prices = JSON.parse(localStorage.getItem('itemList'));
+    var lastUpdate = localStorage.getItem('lastUpdate');
     var priceElements = [];
     var dataHash = undefined;
 
@@ -260,6 +250,40 @@ jQuery.noConflict();
         838: 817,
         5999: 6000,
         2093: 5020
+    };
+
+    //As of right now, the only way I can see to extract paint on an object from tf2outpost is
+    //by it's literal name. Really wish they had a public API...
+    var paintMapping = {
+       '729E42': 5027,
+       '424F3B': 5028,
+       '51384A': 5029,
+       'D8BED8': 5030,
+       '7D4071': 5031,
+       'CF7336': 5032,
+       'A57545': 5033,
+       'C5AF91': 5034,
+       '694D3A': 5035,
+       '7C6C57': 5036,
+       'E7B53B': 5037,
+       '7E7E7E': 5038,
+       'E6E6E6': 5039,
+       '141414': 5040,
+       'B8383B': 5046, //double color
+       'FF69B4': 5051,
+       '2F4F4F': 5052,
+       '808000': 5053,
+       '32CD32': 5054,
+       'F0E68C': 5055,
+       'E9967A': 5056,
+       '483838': 5060, //double color
+       'A89A8C': 5061, //double color
+       '3B1F23': 5062, //double color
+       '654740': 5063, //double color
+       '803020': 5064, //double color
+       'C36C2D': 5065, //double color
+       'BCDDB3': 5076,
+       '2D2D24': 5077
     };
 
     $(document).ready(function() {
