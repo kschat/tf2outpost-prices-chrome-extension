@@ -16,6 +16,7 @@
 		}
 	],
 	"permissions": [
+		"contextMenus",
 		"storage",
 		"http://backpack.tf/*",
 		"*://*.tf2outpost.com/*"
