@@ -12,7 +12,7 @@
 		{
 			"matches": ["*://*.tf2outpost.com/*"],
 			"css": ["css/prices.css"],
-			"js": ["js/jquery-1.9.0.min.js", "js/tf2op-bp.js"]
+			"js": ["js/libs/require/require-2.1.2.min.js", "js/libs/require/require-cs.js", "js/bootstrap.js"]
 		}
 	],
 	"permissions": [
@@ -28,5 +28,8 @@
 		},
 		"default_title": "TF2 Outpost prices",
 		"default_popup": "popup.html"
-	}
+	},
+	"web_accessible_resources": [
+		"js/*"
+	]
 }

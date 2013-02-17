@@ -6,7 +6,7 @@ jQuery.noConflict();
 
 (function($) {
     
-    var PriceElement = function(price) {
+    /*var PriceElement = function(price) {
         this.price = price;
         this.el = $('<div></div>')
             .attr({class: 'price'})
@@ -145,7 +145,7 @@ jQuery.noConflict();
         console.log(arguments.length);
 
         $items.each(function(index) {
-            dataHash =  $(this).attr('data-hash');
+            dataHash = $(this).attr('data-hash');
             
             if(dataHash) {
                 //Test to see if the item is uncraftable. Needs to be done because
@@ -213,7 +213,7 @@ jQuery.noConflict();
         
         //Loads the price elements
         loadUI();
-    }
+    }*/
 
     //Object used to control the never ending tf2outpost feature
     var LoadingElement = function(selector) {
@@ -328,7 +328,7 @@ jQuery.noConflict();
             }
         }
     };
-
+    /*
     var prices = JSON.parse(localStorage.getItem('itemList'));
     var lastUpdate = localStorage.getItem('lastUpdate');
     var priceElements = [];
@@ -411,7 +411,7 @@ jQuery.noConflict();
        'BCDDB3': 5076,
        '2D2D24': 5077
     };
-
+    */
     $(document).ready(function() {
         var test = new LoadingElement('#pagination');
         $(window).scroll($.proxy(test.detectBottomOfPage, test));
