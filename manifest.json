@@ -2,7 +2,7 @@
 	"manifest_version": 2,
 	"name": "tf2outpost price integration",
 	"description": "Grabs prices of items from backpack.tf and adds them to tf2outpost.com",
-	"version": "1.1.6",
+	"version": "1.2.1",
 	"icons": {
 		"16": "images/keyicon16.png",
 		"48": "images/keyicon48.png",

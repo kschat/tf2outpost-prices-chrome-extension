@@ -10,19 +10,28 @@ define([
 		routes: {
 			'': 				'loadApp',
 			'/': 				'loadApp',
-			'/recent/2': 		'loadApp'
+			'/recent/2': 		'loadApp',
+			'trade/:id': 		'loadApp',
+			'trades': 			'basicLoadApp',
 		},
 		loadApp: function() {
 			App.initialize();
-			
+
 			if(App.getPageLoader()) {
 				var pageLoader = App.getPageLoader();
 				pageLoader.options.renderer = App.render;
-				
+
 				$(window).scroll(function() {
 					pageLoader.detectBottomOfPage();
 				});
 			}
+
+			$(document).ready(function() {
+				App.render($('.item'));
+			});
+		},
+		basicLoadApp: 	function() {
+			App.initialize();
 
 			$(document).ready(function() {
 				App.render($('.item'));

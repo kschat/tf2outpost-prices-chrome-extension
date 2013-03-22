@@ -95,9 +95,10 @@ define([
 		pageLoader;
 
 	var initialize = function() {
-		checkPriceUpdate();
-		prices = JSON.parse(localStorage.getItem('itemList'));
 		lastUpdate = localStorage.getItem('lastUpdate');
+        checkPriceUpdate();
+		prices = JSON.parse(localStorage.getItem('itemList'));
+
 		priceElements = new PriceCollection();
 		priceListView = new PriceListView({ model: priceElements });
 		pageLoader = new PageLoaderView({ el: '#pagination', model: new PageLoaderModel(), priceElements: priceElements });
@@ -137,20 +138,23 @@ define([
 	}
 
 	//Checks if an update is needed for the prices
-	function checkPriceUpdate() {
-		if(typeof localStorage.getItem('itemList') === 'undefined' || 
-			typeof lastUpdate === 'undefined' || 
-			getHoursPassed(getUnixCurrentTime(), lastUpdate) >= 1) {
+	function checkPriceUpdate(force) {
+		if(force === true || typeof localStorage.getItem('itemList') === 'undefined' || 
+			typeof lastUpdate === 'undefined' || getHoursPassed(getUnixCurrentTime(), lastUpdate) >= 1) {
 
+            console.log('check');
 			var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function (e) {
+            xhr.onreadystatechange = function () {
     			if(xhr.readyState === 4 && xhr.status === 200) {
     				var list = JSON.parse(xhr.responseText);
-    				var prices = list.response.prices,
-    					time = list.response.current_time;
 
-    				localStorage.setItem('itemList', JSON.stringify(prices));
-    				localStorage.setItem('lastUpdate', time);
+                    if(typeof list !== 'undefined') {
+        				var prices = list.response.prices,
+        					time = list.response.current_time;
+
+        				localStorage.setItem('itemList', JSON.stringify(prices));
+        				localStorage.setItem('lastUpdate', time);
+                    }
     			}
     		}
             xhr.open('GET', 'http://backpack.tf/api/IGetPrices/v2');
@@ -240,7 +244,7 @@ define([
             return prices[item[1]][item[2]][0];
         }
         catch(ex) {
-            return { value: 'error' };
+            return;
         }
     }
 
