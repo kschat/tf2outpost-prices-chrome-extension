@@ -135,14 +135,13 @@ define([
            }
            id++;
         });
-	}
+	};
 
 	//Checks if an update is needed for the prices
 	function checkPriceUpdate(force) {
 		if(force === true || typeof localStorage.getItem('itemList') === 'undefined' || 
 			typeof lastUpdate === 'undefined' || getHoursPassed(getUnixCurrentTime(), lastUpdate) >= 1) {
-
-            console.log('check');
+            
 			var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function () {
     			if(xhr.readyState === 4 && xhr.status === 200) {
