@@ -2,7 +2,8 @@
 	"manifest_version": 2,
 	"name": "tf2outpost price integration",
 	"description": "Grabs prices of items from backpack.tf and adds them to tf2outpost.com",
-	"version": "1.2.2",
+	"version": "1.3.0",
+	"author": "Kyle Schattler",
 	"icons": {
 		"16": "images/keyicon16.png",
 		"48": "images/keyicon48.png",
@@ -12,22 +13,24 @@
 		{
 			"matches": ["*://*.tf2outpost.com/*"],
 			"css": ["css/prices.css"],
-			"js": ["js/libs/require/require-2.1.2.min.js", "js/libs/require/require-cs.js", "js/bootstrap.js"]
+			"js": ["js/build/app.js"]
 		}
 	],
 	"permissions": [
-		"contextMenus",
 		"storage",
-		"http://backpack.tf/*",
-		"*://*.tf2outpost.com/*"
+		"http://backpack.tf/*"
 	],
 	"page_action": {
 		"default_icon": {
 			"19": "images/keyicon19.png",
 			"38": "images/keyicon38.png"
 		},
-		"default_title": "TF2 Outpost prices",
-		"default_popup": "popup.html"
+		"default_title": "TF2 Outpost price settings",
+		"default_popup": "html/popup.html"
+	},
+	"background": {
+		"scripts": ["js/build/bootstrap.js"],
+		"persistent": false
 	},
 	"web_accessible_resources": [
 		"js/*"

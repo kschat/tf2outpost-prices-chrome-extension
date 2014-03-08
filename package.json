@@ -1,0 +1,29 @@
+{
+  "name": "tf2-op-bp",
+  "description": "A Chrome extension used to fetch item prices from backpack.tf and inject them into tf2outpost.com",
+  "version": "0.0.1",
+  "contributors": [
+    {
+      "name": "Kyle Schattler",
+      "email": "kyleschattler@gmail.com"
+    }
+  ],
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kschat/tf2outpost-prices-chrome-extension.git"
+  },
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "chai": "~1.9.0",
+    "sinon-chai": "~2.4.0",
+    "sinon": "~1.7.3",
+    "jquery": "~1.8.3",
+    "gulp": "~3.5.2",
+    "gulp-util": "~2.2.14",
+    "gulp-browserify": "~0.4.6",
+    "gulp-qunit": "~0.2.1",
+    "gulp-concat": "~2.1.7"
+  }
+}

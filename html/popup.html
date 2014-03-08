@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="../css/bootstrap-theme.min.css" />
+		<link rel="stylesheet" type="text/css" href="../css/popup.css">
+
+		<script src="../js/build/jquery-2.1.0.js"></script>
+		<script src="../js/build/bootstrap.min.js"></script>
+		<script src="../js/build/popup.js"></script>
+	</head>
+
+	<body>
+		<div class="wrap">
+			<div class="container">
+				<div class="row js-header-view">
+					<div class="col-xs-12">
+						<div class="page-header clearfix">
+							<h4>TF2 Outpost Price Integration <small class="js-header-label">Menu</small></h4>
+
+							<button type="button" class="btn btn-default pull-right js-refresh-btn" data-toggle="tooltip" title="Refresh Prices" data-placement="bottom">
+								<span class="glyphicon glyphicon-repeat"></span>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="content-wrap">
+				<div class="js-main-content content-panel show">
+					<div class="container">
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="list-group">
+									<a class="list-group-item js-show-price-btn" href="#">
+										Show prices 
+										<span class="badge">
+											<span class="glyphicon glyphicon-ok"></span>
+										</span>
+									</a>
+
+									<a class="list-group-item js-enable-neto-btn" href="#">
+										Enable never ending TF2Outpost 
+										<span class="badge">
+											<span class="glyphicon glyphicon-ok"></span>
+										</span>
+									</a>
+
+									<a class="list-group-item js-auto-refresh-btn" href="#">
+										Automatically refresh prices 
+										<span class="badge">
+											<span class="glyphicon glyphicon-ok"></span>
+										</span>
+									</a>
+
+									<a class="list-group-item js-include-paint-btn" href="#">
+										Include paint in price  
+										<span class="badge">
+											<span class="glyphicon glyphicon-ok"></span>
+										</span>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="js-about-content content-panel">
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="jumbotron">
+								<div class="container">
+									<h3>About</h3>
+									<p class="js-about-text"></p>
+
+									<div class="row">
+										<div class="col-xs-12">
+											<a class="btn btn-primary" target="_blank" href="https://github.com/kschat/tf2outpost-prices-chrome-extension">View Source on Github</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<footer class="footer">
+			<div class="container">
+				<div class="footer-content js-footer-content">
+					<span class="pull-left text-muted js-version-text" style="line-height: 30px;"></span>
+					<div class="btn-group pull-right">
+						<a class="btn btn-default js-home-btn" href="http://kyleschattler.com" target="_blank" data-toggle="tooltip" title="Authors Homepage">
+							<span class="glyphicon glyphicon-home"></span>
+						</a>
+
+						<a class="btn btn-default js-about-btn" href="#" data-toggle="tooltip" title="About Extension">
+							<span class="glyphicon glyphicon-info-sign"></span>
+						</a>
+
+						<a class="btn btn-default js-back-btn hidden" href="#" data-toggle="tooltip" title="Go Back">
+							<span class="glyphicon glyphicon-arrow-left"></span>
+						</a>
+
+						<a class="btn btn-default js-report-bug-btn" href="https://chrome.google.com/webstore/support/ndflpbfgklcjpkepbmfgjjancaocpnmp?hl=en&gl=US#bug" target="_blank" data-toggle="tooltip" title="Report Bug or Request Feature">
+							<span class="glyphicon glyphicon-bullhorn"></span>
+						</a>
+
+						<a class="btn btn-default js-adv-settings-btn" href="#" data-toggle="tooltip" title="Advanced Options">
+							<span class="glyphicon glyphicon-cog"></span>
+						</a>
+					</div>
+				</div>
+			</div>
+		</footer>
+	</body>
+</html>
