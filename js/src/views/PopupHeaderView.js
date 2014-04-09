@@ -1,16 +1,11 @@
-var Popup = (function(app) {
-	app.HeaderView = champ.view.extend('PopupHeaderView', {
-		container: '.js-header-view',
+var PopupHeaderView = champ.view.extend('PopupHeaderView', {
+	container: '.js-header-view',
 
-		$: {
-			headerLabel: '.js-header-label',
-			refreshBtn: '.js-refresh-btn : click'
-		},
+	$: {
+		headerLabel: '.js-header-label',
+		refreshBtn: '.js-refresh-btn : click',
+		refreshBtnTooltip: '.js-refresh-btn-wrap : mouseover'
+	},
 
-		init: function(options) {
-			this.$.refreshBtn.tooltip();
-		}
-	});
-
-	return app;
-})(Popup || {});
+	init: function(options) { }
+});

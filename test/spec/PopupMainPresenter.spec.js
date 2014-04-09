@@ -5,28 +5,33 @@
 		return this.presenter.view.$[prop + 'Btn'].children('.badge').hasClass('badge-primary');
 	};
 
-	module('PopupPresenter', {
+	module('PopupMainPresenter', {
 		setup: function() {
-			champ.ioc.register('SettingsRepository', {
-				get: sinon.stub().returns({
-					showPrices: true,
-					enableNeto: true,
-					autoRefresh: true,
-					includePaint: true
-				}),
+			champ.ioc.reset();
+			champ.ioc
+				.register('PopupMainView', PopupMainView)
+				.register('PopupModel', PopupModel)
+				.register('SettingsRepository', {
+					get: sinon.stub().yields(null, {
+						showPrices: true,
+						enableNeto: true,
+						autoRefresh: true,
+						includePaint: true,
+						updateInterval: 5,
+						lastUpdate: 0
+					}),
 
-				set: sinon.spy()
-			});
+					update: sinon.spy()
+				});
 
 			this.eventSpy = sinon.spy(champ.events, 'trigger');
-			this.presenter = new Popup.PopupPresenter();
+			this.presenter = new PopupMainPresenter();
 			this.testUiChange = testUiChange.bind(this);
 		},
 
 		teardown: function() {
 			this.eventSpy.restore();
 			champ.events.off();
-			champ.ioc.unregister('SettingsRepository');
 
 			$('.js-main-content a')
 				.off()
@@ -79,14 +84,17 @@
 
 	test('onBtnClick(e)', function() {
 		this.presenter.view.$.showPricesBtn.trigger('click');
+
 		ok(
-			this.presenter.settingsRepository.set.calledWith({
+			this.presenter.settingsRepository.update.calledWith({
 				showPrices: false,
 				enableNeto: true,
 				autoRefresh: true,
-				includePaint: true
+				includePaint: true,
+				updateInterval: 5,
+				lastUpdate: 0
 			}), 
-			'The settingsRepository set method was called'
+			'The settingsRepository update method was called'
 		);
 	});
 

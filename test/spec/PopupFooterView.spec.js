@@ -3,7 +3,7 @@
 
 	module('PopupFooterView', {
 		setup: function() {
-			this.view = new Popup.PopupFooterView();
+			this.view = new PopupFooterView();
 		},
 
 		teardown: function() { }

@@ -13,12 +13,13 @@
 		{
 			"matches": ["*://*.tf2outpost.com/*"],
 			"css": ["css/prices.css"],
-			"js": ["js/build/app.js"]
+			"js": ["js/build/contentScript.js"]
 		}
 	],
 	"permissions": [
 		"storage",
-		"http://backpack.tf/*"
+    "alarms",
+		"http://tf2prices.kyleschattler.com/*"
 	],
 	"page_action": {
 		"default_icon": {
@@ -29,10 +30,7 @@
 		"default_popup": "html/popup.html"
 	},
 	"background": {
-		"scripts": ["js/build/bootstrap.js"],
+		"scripts": ["js/build/background.js"],
 		"persistent": false
-	},
-	"web_accessible_resources": [
-		"js/*"
-	]
+	}
 }

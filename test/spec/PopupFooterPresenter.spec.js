@@ -3,16 +3,18 @@
 
 	module('PopupFooterPresenter', {
 		setup: function() {
-			champ.ioc.register('ManifestProvider', {
-				get: sinon.stub().withArgs('version').returns('1.0.0')
-			});
+			champ.ioc.reset();
+			champ.ioc
+				.register('PopupFooterView', PopupFooterView)
+				.register('ManifestProvider', {
+					get: sinon.stub().withArgs('version').returns('1.0.0')
+				});
 
 			this.eventSpy = sinon.spy(champ.events, 'trigger');
-			this.presenter = new Popup.FooterPresenter();
+			this.presenter = new PopupFooterPresenter();
 		},
 
 		teardown: function() {
-			champ.ioc.unregister('ManifestProvider');
 			this.eventSpy.restore();
 		}
 	});

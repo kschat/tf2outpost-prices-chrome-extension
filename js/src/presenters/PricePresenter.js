@@ -1,6 +1,10 @@
 var PricePresenter = champ.presenter.extend('PricePresenter', {
 	models: ['PriceModel'],
 
+  events: {
+    'background:setting:showPrices': 'onShowPricesChange'
+  },
+
 	init: function(options) {
 		this.views = [new PriceView({ container: options.container })];
 		this.view = this.views[0];
@@ -15,16 +19,62 @@ var PricePresenter = champ.presenter.extend('PricePresenter', {
 
 		this.model.property(
 			'hash',
-			this.view.container.data('hash') + ',' + pIndex
+			this.constructHash(
+        this.view.container.data('hash'),
+        this.isTradable(this.view.container),
+        this.isCraftable(this.view.container),
+        pIndex
+      )
 		);
+
+    if(!this.isPaintCan(this.view.container.find('a > span > img'))) {
+      this.model.property(
+        'paint',
+        this.extractPaintColor(this.view.container.find('.paint'))
+      );
+    }
 
 		this.label(this.model.property('label'));
 	},
+
+  constructHash: function(oHash, isTradable, isCraftable, pIndex) {
+    oHash = oHash.split(',');
+    oHash.splice(3, 0, isTradable, isCraftable, pIndex);
+
+    return oHash.join(',');
+  },
 
 	label: function(val) {
 		if(!val) { return this.view.$.label.html(); }
 		this.view.$.label.html(val);
 	},
+
+  isCraftable: function(node) {
+    return node.hasClass('uncraftable')
+      ? 0
+      : 1;
+  },
+
+  isTradable: function(node) {
+    return node.hasClass('untradable')
+      ? 0
+      : 1;
+  },
+
+  isPaintCan: function($imgNode) {
+    return !!$imgNode.attr('src').match(/\/paintcan/);
+  },
+
+  extractPaintColor: function($paintNode) {
+    return ($paintNode.attr('style') || '#')
+      .split('#')[1]
+      .slice(0, -1)
+      .toUpperCase();
+  },
+
+  onShowPricesChange: function(isVisible) {
+    this.view.container.children('.price')[isVisible ? 'show' : 'hide']();
+  },
 
 	extractUnusualQuality: function(imgUrl) {
 		imgUrl = imgUrl || '';
@@ -38,8 +88,8 @@ var PricePresenter = champ.presenter.extend('PricePresenter', {
 
 	convertCurrency: function(value) {
 		if(isNaN(value) || !value.toFixed) { return value; }
-		var keyValue = priceProvider.get('440,5021,6,0'),
-			budsValue = priceProvider.get('440,143,6,0');
+		var keyValue = priceProvider.get('440,5021,6'),
+			budsValue = priceProvider.get('440,143');
 
 		if(value > keyValue && value <= budsValue) {
 			value = (value / keyValue).toFixed(2);
@@ -55,6 +105,7 @@ var PricePresenter = champ.presenter.extend('PricePresenter', {
 	},
 
 	onAppInit: function(args) {
+    this.onShowPricesChange(args.showPrices);
 		this.onPriceUpdate({ status: 'success' });
 	},
 
@@ -66,7 +117,14 @@ var PricePresenter = champ.presenter.extend('PricePresenter', {
 
 	onPriceUpdate: function(args) {
 		if(args.status !== 'success') { return; }
-		this.label('loading...');
-		this.model.property('price', priceProvider.get(this.model.properties.hash));
+    this.label('loading...');
+    
+    this.model.property(
+      'price',
+      priceProvider.get(
+        this.model.properties.hash, 
+        this.model.properties.paint
+      )
+    );
 	}
 });

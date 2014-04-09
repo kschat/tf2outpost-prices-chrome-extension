@@ -1,13 +1,9 @@
-var Popup = (function(app) {
-	app.AboutView = champ.view.extend('PopupAboutView', {
-		container: '.js-about-content',
+var AboutView = champ.view.extend('PopupAboutView', {
+	container: '.js-about-content',
 
-		$: {
-			aboutText: '.js-about-text'
-		},
+	$: {
+		aboutText: '.js-about-text'
+	},
 
-		init: function(options) { }
-	});
-
-	return app;
-})(Popup || {});
+	init: function(options) { }
+});

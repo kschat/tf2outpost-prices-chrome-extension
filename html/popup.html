@@ -3,10 +3,10 @@
 	<head>
 		<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css" />
 		<link rel="stylesheet" type="text/css" href="../css/bootstrap-theme.min.css" />
+		<link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css">
 		<link rel="stylesheet" type="text/css" href="../css/popup.css">
 
-		<script src="../js/build/jquery-2.1.0.js"></script>
-		<script src="../js/build/bootstrap.min.js"></script>
+		<script src="../js/build/libs.min.js"></script>
 		<script src="../js/build/popup.js"></script>
 	</head>
 
@@ -18,9 +18,11 @@
 						<div class="page-header clearfix">
 							<h4>TF2 Outpost Price Integration <small class="js-header-label">Menu</small></h4>
 
-							<button type="button" class="btn btn-default pull-right js-refresh-btn" data-toggle="tooltip" title="Refresh Prices" data-placement="bottom">
-								<span class="glyphicon glyphicon-repeat"></span>
-							</button>
+							<div class="pull-right js-refresh-btn-wrap" data-toggle="tooltip" data-placement="left">
+								<button type="button" class="btn btn-default disabled js-refresh-btn">
+									<span class="fa fa-repeat"></span>
+								</button>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -35,28 +37,28 @@
 									<a class="list-group-item js-show-price-btn" href="#">
 										Show prices 
 										<span class="badge">
-											<span class="glyphicon glyphicon-ok"></span>
+											<span class="fa fa-check"></span>
 										</span>
 									</a>
 
 									<a class="list-group-item js-enable-neto-btn" href="#">
 										Enable never ending TF2Outpost 
 										<span class="badge">
-											<span class="glyphicon glyphicon-ok"></span>
+											<span class="fa fa-check"></span>
 										</span>
 									</a>
 
 									<a class="list-group-item js-auto-refresh-btn" href="#">
 										Automatically refresh prices 
 										<span class="badge">
-											<span class="glyphicon glyphicon-ok"></span>
+											<span class="fa fa-check"></span>
 										</span>
 									</a>
 
 									<a class="list-group-item js-include-paint-btn" href="#">
 										Include paint in price  
 										<span class="badge">
-											<span class="glyphicon glyphicon-ok"></span>
+											<span class="fa fa-check"></span>
 										</span>
 									</a>
 								</div>
@@ -75,7 +77,7 @@
 
 									<div class="row">
 										<div class="col-xs-12">
-											<a class="btn btn-primary" target="_blank" href="https://github.com/kschat/tf2outpost-prices-chrome-extension">View Source on Github</a>
+											<a class="btn btn-primary" target="_blank" href="https://github.com/kschat/tf2outpost-prices-chrome-extension"><span class="fa fa-github fa-lg"></span> View Source on GitHub</a>
 										</div>
 									</div>
 								</div>
@@ -92,27 +94,29 @@
 					<span class="pull-left text-muted js-version-text" style="line-height: 30px;"></span>
 					<div class="btn-group pull-right">
 						<a class="btn btn-default js-home-btn" href="http://kyleschattler.com" target="_blank" data-toggle="tooltip" title="Authors Homepage">
-							<span class="glyphicon glyphicon-home"></span>
+							<span class="fa fa-home"></span>
 						</a>
 
 						<a class="btn btn-default js-about-btn" href="#" data-toggle="tooltip" title="About Extension">
-							<span class="glyphicon glyphicon-info-sign"></span>
+							<span class="fa fa-info-circle"></span>
 						</a>
 
 						<a class="btn btn-default js-back-btn hidden" href="#" data-toggle="tooltip" title="Go Back">
-							<span class="glyphicon glyphicon-arrow-left"></span>
+							<span class="fa fa-arrow-left"></span>
 						</a>
 
-						<a class="btn btn-default js-report-bug-btn" href="https://chrome.google.com/webstore/support/ndflpbfgklcjpkepbmfgjjancaocpnmp?hl=en&gl=US#bug" target="_blank" data-toggle="tooltip" title="Report Bug or Request Feature">
-							<span class="glyphicon glyphicon-bullhorn"></span>
+						<a class="btn btn-default js-report-bug-btn" href="https://github.com/kschat/tf2outpost-prices-chrome-extension/issues" target="_blank" data-toggle="tooltip" title="Report Bug or Request Feature">
+							<span class="fa fa-bullhorn"></span>
 						</a>
 
 						<a class="btn btn-default js-adv-settings-btn" href="#" data-toggle="tooltip" title="Advanced Options">
-							<span class="glyphicon glyphicon-cog"></span>
+							<span class="fa fa-cog"></span>
 						</a>
 					</div>
 				</div>
 			</div>
 		</footer>
+
+		<span tabindex="1" style="position: absolute; left: -999999px; width: 0;"></span>
 	</body>
 </html>

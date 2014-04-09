@@ -3,6 +3,9 @@
 
 	module('PricePresenter', {
 		setup: function() {
+			champ.ioc.reset();
+			champ.ioc.register('PriceModel', PriceModel);
+
 			this.presenter = new PricePresenter({ container: $('#basic-item-test') });
 			this.cratePresenter = new PricePresenter({ container: $('#crate-test') });
 		},
@@ -11,12 +14,14 @@
 			$('#basic-item-test').find('.price').remove();
 			$('#crate-test').find('.price').remove();
 			champ.events.off();
+      localStorage.removeItem('tf2ItemList');
 		}
 	});
 
 	var setItemPrices = function() {
-		var items = JSON.parse($('#mock-price-data').text());
-		localStorage.setItem('tf2ItemList', JSON.stringify(items.response.prices));
+		var mockData = JSON.parse($('#mock-price-data').text());
+    localStorage.setItem('tf2ItemList', JSON.stringify(mockData.items));
+    champ.events.trigger('app:init', { includePaint: false });
 	};
 
 	test('init()', function() {
@@ -73,11 +78,47 @@
 
 	test('convertCurrency()', function() {
 		setItemPrices();
-		equal(this.presenter.convertCurrency(0.33), '0.33 ref', 'Converts scrap to ref');
-		equal(this.presenter.convertCurrency(1), '1.00 ref', 'Properly labels ref');
-		equal(this.presenter.convertCurrency(7), '7.00 ref', 'Shows 1 key as 7 ref');
-		equal(this.presenter.convertCurrency(14), '2.00 keys', 'Converts ref to keys');
-		equal(this.presenter.convertCurrency(137), '1.00 bud', 'Converts keys to buds');
-		equal(this.presenter.convertCurrency(273), '2.00 buds', 'Makes bud plural when its more than 1');
+
+		equal(
+      this.presenter.convertCurrency(0.33),
+      '0.33 ref',
+      'Converts scrap to ref'
+    );
+		
+    equal(
+      this.presenter.convertCurrency(1),
+      '1.00 ref',
+      'Properly labels ref'
+    );
+		
+    equal(
+      this.presenter.convertCurrency(7),
+      '7.00 ref',
+      'Shows 1 key as 7 ref'
+    );
+		
+    equal(
+      this.presenter.convertCurrency(14),
+      '2.00 keys',
+      'Converts ref to keys'
+    );
+		
+    equal(
+      this.presenter.convertCurrency(196.3),
+      '1.00 bud',
+      'Converts keys to buds'
+    );
+
+    equal(
+      this.presenter.convertCurrency(14),
+      '2.00 keys',
+      'Makes key plural when its more than 1'
+    );
+		
+    equal(
+      this.presenter.convertCurrency(392.6),
+      '2.00 buds',
+      'Makes bud plural when its more than 1'
+    );
 	});
 })(jQuery);

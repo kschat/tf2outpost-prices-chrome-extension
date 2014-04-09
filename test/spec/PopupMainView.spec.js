@@ -1,9 +1,9 @@
 (function($) {
 	'use strict';
 
-	module('PopupView', {
+	module('PopupMainView', {
 		setup: function() {
-			this.view = new Popup.PopupView();
+			this.view = new PopupMainView();
 			this.eventSpy = sinon.spy(champ.events, 'trigger');
 		},
 

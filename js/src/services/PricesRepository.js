@@ -1,0 +1,1 @@
+var PricesRepository = Repository.create('prices');
