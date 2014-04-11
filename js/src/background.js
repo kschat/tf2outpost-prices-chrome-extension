@@ -14,6 +14,7 @@ chrome.runtime.onInstalled.addListener(function(details) {
           includePaint: true,
           lastUpdate: 0,
           updateInterval: 5,
+          initialSetup: true,
           apiUrl: 'http://tf2prices.kyleschattler.com/prices'
         }
       });
@@ -34,6 +35,11 @@ chrome.runtime.onMessage.addListener(function(req, sender, res) {
         chrome.alarms.create('alarm:autoRefresh', {
           periodInMinutes: settings.updateInterval
         });
+      }
+
+      if(settings.initialSetup) {
+        CommandBus.handle(new UpdatePricesCommand());
+        SettingsRepository.update('initialSetup', false);
       }
 
       res(settings);

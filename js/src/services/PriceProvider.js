@@ -136,6 +136,8 @@ var priceProvider = (function($) {
 
   champ.events
     .on('app:init', function(settings) {
+      if(settings.initialSetup) { return; }
+
       _prices = JSON.parse(localStorage.getItem('tf2ItemList'));
       _includePaint = settings.includePaint;
 
@@ -147,6 +149,10 @@ var priceProvider = (function($) {
     .on('background:price:update', function(prices) {
       _prices = prices;
       localStorage.setItem('tf2ItemList', JSON.stringify(_prices));
+
+      for(var i in _paintMapping) {
+        _paintPrices[i] = getPrice('440,' + _paintMapping[i] + ',6');
+      }
 
       champ.events.trigger('priceProvider:update', { status: 'success' });
     })

@@ -28,6 +28,8 @@
     "gulp-beautify": "~1.0.3",
     "gulp-uglify": "~0.2.1",
     "gulp-rename": "~1.2.0",
-    "gulp-json-editor": "^2.0.2"
+    "gulp-json-editor": "^2.0.2",
+    "grunt": "^0.4.4",
+    "grunt-crx": "^0.3.3"
   }
 }

@@ -105,6 +105,7 @@ var PricePresenter = champ.presenter.extend('PricePresenter', {
 	},
 
 	onAppInit: function(args) {
+    if(args.initialSetup) { return; }
     this.onShowPricesChange(args.showPrices);
 		this.onPriceUpdate({ status: 'success' });
 	},
