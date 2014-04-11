@@ -1,1 +1,1 @@
-})(champ, jQuery);
+}(champ, jQuery));

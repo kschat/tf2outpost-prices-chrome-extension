@@ -1,7 +1,10 @@
 Bootstrapper.bootstrap();
 
 chrome.runtime.onInstalled.addListener(function(details) {
-  //if(details.reason === 'install') {
+  var updateStorage = details.reason === 'install' || 
+    (details.reason === 'update' && parseFloat(details.previousVersion) <= 1.2);
+
+  if(updateStorage) {
     chrome.storage.sync.clear(function() {
       chrome.storage.sync.set({
         settings: {
@@ -15,13 +18,17 @@ chrome.runtime.onInstalled.addListener(function(details) {
         }
       });
     });
-  //}
+  }
 });
 
 chrome.runtime.onMessage.addListener(function(req, sender, res) {
-  if(req.action === 'app:init') {
+  if(req.action === 'pageAction:show') {
     chrome.pageAction.show(sender.tab.id);
 
+    return;
+  }
+
+  if(req.action === 'app:init') {
     SettingsRepository.get('*', function(err, settings) {
       if(settings.autoRefresh) {
         chrome.alarms.create('alarm:autoRefresh', {

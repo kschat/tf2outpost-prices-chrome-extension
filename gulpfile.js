@@ -1,23 +1,56 @@
-var gulp = require('gulp'),
-	gutil = require('gulp-util'),
-	concat = require('gulp-concat'),
-	beautify = require('gulp-beautify'),
-	uglify = require('gulp-uglify'),
-	rename = require('gulp-rename'),
-	qunit = require('gulp-qunit');
+var gulp = require('gulp')
+	, gutil = require('gulp-util')
+	, concat = require('gulp-concat')
+	, beautify = require('gulp-beautify')
+	, uglify = require('gulp-uglify')
+	, rename = require('gulp-rename')
+	, qunit = require('gulp-qunit')
+  , jeditor = require('gulp-json-editor');
+
+gulp.task('testTask', function() {
+  gulp.src('test.json')
+    .pipe(jeditor( {
+      testVal: 3
+    }))
+    .pipe(gulp.dest('.'));
+});
+
+gulp.task('deploy', function() {
+  gulp.src('manifest.json')
+    .pipe(jeditor(function(json) {
+      json.content_scripts[0].js[0] = 'js/build/contentScript.min.js';
+
+      return json;
+    }))
+    .pipe(gulp.dest('.'));
+});
 
 gulp.task('build', function() {
+  gulp.src('manifest.json')
+    .pipe(jeditor(function(json) {
+      json.content_scripts[0].js[0] = 'js/build/contentScript.js';
+
+      return json;
+    }))
+    .pipe(gulp.dest('.'));
+
 	gulp.src([
+    'js/src/partials/contentScript.intro.js',
 		'js/src/libs/jquery/jquery-2.1.0.js', 
 		'js/src/libs/champion/champion.min.js', 
 		'js/src/views/PriceView.js', 
 		'js/src/presenters/PricePresenter.js', 
 		'js/src/models/PriceModel.js',
 		'js/src/services/PriceProvider.js',
-		'js/src/contentScript.js'
+		'js/src/contentScript.js',
+    'js/src/partials/contentScript.outro.js'
 	])
-	.pipe(concat('contentScript.js'))
-	.pipe(gulp.dest('js/build'));
+	.pipe(concat('contentScript.js', { newLine: '\n\r\n\r' }))
+  .pipe(beautify({ indentChar: '\t', indentSize: 1 }))
+	.pipe(gulp.dest('js/build'))
+  .pipe(uglify({ mangle: false }))
+  .pipe(rename('contentScript.min.js'))
+  .pipe(gulp.dest('js/build/'));
 
 	gulp.src([
 		'js/src/libs/jquery/jquery-2.1.0.js',
