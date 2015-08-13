@@ -7,14 +7,6 @@ var gulp = require('gulp')
 	, qunit = require('gulp-qunit')
   , jeditor = require('gulp-json-editor');
 
-gulp.task('testTask', function() {
-  gulp.src('test.json')
-    .pipe(jeditor( {
-      testVal: 3
-    }))
-    .pipe(gulp.dest('.'));
-});
-
 gulp.task('deploy', function() {
   gulp.src('manifest.json')
     .pipe(jeditor(function(json) {
@@ -36,10 +28,10 @@ gulp.task('build', function() {
 
 	gulp.src([
     'js/src/partials/contentScript.intro.js',
-		'js/src/libs/jquery/jquery-2.1.0.js', 
-		'js/src/libs/champion/champion.min.js', 
-		'js/src/views/PriceView.js', 
-		'js/src/presenters/PricePresenter.js', 
+		'js/src/libs/jquery/jquery-2.1.0.js',
+		'js/src/libs/champion/champion.min.js',
+		'js/src/views/PriceView.js',
+		'js/src/presenters/PricePresenter.js',
 		'js/src/models/PriceModel.js',
 		'js/src/services/PriceProvider.js',
 		'js/src/contentScript.js',

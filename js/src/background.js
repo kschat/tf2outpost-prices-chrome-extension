@@ -1,8 +1,8 @@
 Bootstrapper.bootstrap();
 
 chrome.runtime.onInstalled.addListener(function(details) {
-  var updateStorage = details.reason === 'install' || 
-    (details.reason === 'update' && parseFloat(details.previousVersion) <= 1.2);
+  var updateStorage = true || details.reason === 'install' ||
+    (details.reason === 'update' && parseFloat(details.previousVersion) <= 1.3);
 
   if(updateStorage) {
     chrome.storage.sync.clear(function() {
@@ -12,6 +12,7 @@ chrome.runtime.onInstalled.addListener(function(details) {
           enableNeto: true,
           autoRefresh: true,
           includePaint: true,
+          useBudsAsCurrency: false,
           lastUpdate: 0,
           updateInterval: 5,
           initialSetup: true,

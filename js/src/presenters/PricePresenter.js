@@ -1,31 +1,31 @@
 var PricePresenter = champ.presenter.extend('PricePresenter', {
-	models: ['PriceModel'],
+  models: ['PriceModel'],
 
   events: {
     'background:setting:showPrices': 'onShowPricesChange'
   },
 
-	init: function(options) {
-		this.views = [new PriceView({ container: options.container })];
-		this.view = this.views[0];
+  init: function(options) {
+    this.views = [new PriceView({ container: options.container })];
+    this.view = this.views[0];
 
-		champ.events
-			.on('app:init', this.onAppInit.bind(this))
-			.on('priceProvider:update', this.onPriceUpdate.bind(this))
-			.on('model:' + this.model.id + ':changed', this.onModelChanged.bind(this));
+    champ.events
+      .on('app:init', this.onAppInit.bind(this))
+      .on('priceProvider:update', this.onPriceUpdate.bind(this))
+      .on('model:' + this.model.id + ':changed', this.onModelChanged.bind(this));
 
-		var pIndex = this.extractUnusualQuality(this.view.container.css('background-image'))
-			|| this.extractCrateSeries(this.view.container.find('.series_no'));
+    var pIndex = this.extractUnusualQuality(this.view.container.css('background-image'))
+      || this.extractCrateSeries(this.view.container.find('.series_no'));
 
-		this.model.property(
-			'hash',
-			this.constructHash(
+    this.model.property(
+      'hash',
+      this.constructHash(
         this.view.container.data('hash'),
         this.isTradable(this.view.container),
         this.isCraftable(this.view.container),
         pIndex
       )
-		);
+    );
 
     if(!this.isPaintCan(this.view.container.find('a > span > img'))) {
       this.model.property(
@@ -34,8 +34,8 @@ var PricePresenter = champ.presenter.extend('PricePresenter', {
       );
     }
 
-		this.label(this.model.property('label'));
-	},
+    this.label(this.model.property('label'));
+  },
 
   constructHash: function(oHash, isTradable, isCraftable, pIndex) {
     oHash = oHash.split(',');
@@ -44,10 +44,10 @@ var PricePresenter = champ.presenter.extend('PricePresenter', {
     return oHash.join(',');
   },
 
-	label: function(val) {
-		if(!val) { return this.view.$.label.html(); }
-		this.view.$.label.html(val);
-	},
+  label: function(val) {
+    if(!val) { return this.view.$.label.html(); }
+    this.view.$.label.html(val);
+  },
 
   isCraftable: function(node) {
     return node.hasClass('uncraftable')
@@ -76,56 +76,37 @@ var PricePresenter = champ.presenter.extend('PricePresenter', {
     this.view.container.children('.price')[isVisible ? 'show' : 'hide']();
   },
 
-	extractUnusualQuality: function(imgUrl) {
-		imgUrl = imgUrl || '';
-		var quality = imgUrl.match(/([\d]+)\.png/i);
-		return quality ? quality[1] : 0;
-	},
+  extractUnusualQuality: function(imgUrl) {
+    imgUrl = imgUrl || '';
+    var quality = imgUrl.match(/([\d]+)\.png/i);
+    return quality ? quality[1] : 0;
+  },
 
-	extractCrateSeries: function(node) {
-		return (node && node.text() || '').substr(1) || 0;
-	},
+  extractCrateSeries: function(node) {
+    return (node && node.text() || '').substr(1) || 0;
+  },
 
-	convertCurrency: function(value) {
-		if(isNaN(value) || !value.toFixed) { return value; }
-		var keyValue = priceProvider.get('440,5021,6'),
-			budsValue = priceProvider.get('440,143');
-
-		if(value > keyValue && value <= budsValue) {
-			value = (value / keyValue).toFixed(2);
-			return value + ' key' + (value == 1.00 ? '' : 's');
-		}
-		
-		if(value > budsValue) {
-			value = (value / budsValue).toFixed(2);
-			return value + ' bud' + (value == 1.00 ? '' : 's');
-		}
-		
-		return value.toFixed(2) + ' ref';
-	},
-
-	onAppInit: function(args) {
+  onAppInit: function(args) {
     if(args.initialSetup) { return; }
     this.onShowPricesChange(args.showPrices);
-		this.onPriceUpdate({ status: 'success' });
-	},
+    this.onPriceUpdate({ status: 'success' });
+  },
 
-	onModelChanged: function(args) {
-		if(args.property !== 'price') { return; }
-		this.model.property('label', this.convertCurrency(args.value));
-		this.label(this.model.property('label'));
-	},
+  onModelChanged: function(args) {
+    if(args.property !== 'price') { return; }
+    this.model.property('label', priceProvider.convertCurrency(args.value));
+    this.label(this.model.property('label'));
+  },
 
-	onPriceUpdate: function(args) {
-		if(args.status !== 'success') { return; }
+  onPriceUpdate: function(args) {
+    if(args.status !== 'success') { return; }
     this.label('loading...');
-    
-    this.model.property(
-      'price',
-      priceProvider.get(
-        this.model.properties.hash, 
-        this.model.properties.paint
-      )
-    );
-	}
+
+    var price = priceProvider.convertCurrency(priceProvider.get(
+      this.model.properties.hash,
+      this.model.properties.paint
+    ));
+
+    this.model.property('price', price);
+  }
 });
