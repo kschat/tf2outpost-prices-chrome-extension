@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "tf2outpost price integration",
   "description": "Grabs prices of items from backpack.tf and adds them to tf2outpost.com",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "author": "Kyle Schattler",
   "icons": {
     "16": "images/keyicon16.png",
@@ -17,7 +17,7 @@
       "css/prices.css"
     ],
     "js": [
-      "js/build/contentScript.js"
+      "js/build/contentScript.min.js"
     ]
   }],
   "permissions": [

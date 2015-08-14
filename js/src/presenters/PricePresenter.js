@@ -23,7 +23,8 @@ var PricePresenter = champ.presenter.extend('PricePresenter', {
         this.view.container.data('hash'),
         this.isTradable(this.view.container),
         this.isCraftable(this.view.container),
-        pIndex
+        pIndex,
+        this.isAustralium(this.view.container)
       )
     );
 
@@ -37,9 +38,9 @@ var PricePresenter = champ.presenter.extend('PricePresenter', {
     this.label(this.model.property('label'));
   },
 
-  constructHash: function(oHash, isTradable, isCraftable, pIndex) {
+  constructHash: function(oHash, isTradable, isCraftable, pIndex, isAustralium) {
     oHash = oHash.split(',');
-    oHash.splice(3, 0, isTradable, isCraftable, pIndex);
+    oHash.splice(3, 0, isTradable, isCraftable, pIndex, isAustralium);
 
     return oHash.join(',');
   },
@@ -59,6 +60,10 @@ var PricePresenter = champ.presenter.extend('PricePresenter', {
     return node.hasClass('untradable')
       ? 0
       : 1;
+  },
+
+  isAustralium: function(node) {
+    return node.find('.australium').length;
   },
 
   isPaintCan: function($imgNode) {

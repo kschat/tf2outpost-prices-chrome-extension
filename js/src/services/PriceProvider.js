@@ -33,14 +33,9 @@ var priceProvider = (function($) {
     16: 203,
     17: 204,
     19: 206,
-    20: 207,
-    21: 208,
     22: 209,
     23: 209,
-    //24: 210,
     25: 737,
-    29: 211,
-    30: 212,
     160: 294,
     735: 736,
     831: 810,
@@ -97,6 +92,7 @@ var priceProvider = (function($) {
       var tradable = (!!parseInt(item[3] || 1, 10) ? '' : 'Non-') + 'Tradable';
       var craftable = (!!parseInt(item[4] || 1, 10) ? '' : 'Non-') + 'Craftable';
       var pIndex = item[5] || '0';
+      var isAustralium = parseInt(item[6], 10) || '';
       var price = null;
 
       defIndex = _defindexMapping[defIndex] || defIndex;
@@ -115,6 +111,8 @@ var priceProvider = (function($) {
         }
       })();
 
+      if(defIndex && isAustralium) { defIndex += 'a'; }
+
       try {
         return getPrice.cache[hash] = price || _prices[defIndex].prices[quality][tradable][craftable][pIndex].value_raw;
       }
@@ -123,7 +121,9 @@ var priceProvider = (function($) {
       }
     })();
 
-    if(price && _includePaint && paint) { price += _paintPrices[paint] || 0; }
+    if(price && price !== '???' && _includePaint && paint) {
+      price += _paintPrices[paint] || 0;
+    }
 
     return price;
   }
